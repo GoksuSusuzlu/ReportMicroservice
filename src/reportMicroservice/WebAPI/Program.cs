@@ -81,6 +81,8 @@ builder.Services.AddSwaggerGen(opt =>
     opt.OperationFilter<BearerSecurityRequirementOperationFilter>();
 });
 
+builder.WebHost.UseUrls("http://*:80"); // Bind to port 80 for all network interfaces
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
