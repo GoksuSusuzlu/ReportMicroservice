@@ -6,6 +6,7 @@ using Application.Features.Reports.Queries.GetList;
 using NArchitecture.Core.Application.Requests;
 using NArchitecture.Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Application.Services.RabbitMQClientService;
 
 namespace WebAPI.Controllers;
 
@@ -13,6 +14,13 @@ namespace WebAPI.Controllers;
 [ApiController]
 public class ReportsController : BaseController
 {
+    private readonly IRabbitMQClientService _rabbitMQClientService;
+
+    public ReportsController(IRabbitMQClientService rabbitMQClientService)
+    {
+        _rabbitMQClientService = rabbitMQClientService;
+    }
+
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateReportCommand createReportCommand)
     {
@@ -41,6 +49,8 @@ public class ReportsController : BaseController
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         GetByIdReportResponse response = await Mediator.Send(new GetByIdReportQuery { Id = id });
+        CounterDetailsDto counterDetails = await _rabbitMQClientService.GetCounterDetailsAsync(response.CounterId);
+        response.CounterDetails = counterDetails;
         return Ok(response);
     }
 

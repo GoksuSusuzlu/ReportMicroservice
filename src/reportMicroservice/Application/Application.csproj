@@ -19,9 +19,9 @@
 	<PackageReference Include="NArchitecture.Core.Localization.Abstraction" Version="1.0.0" />
 	<PackageReference Include="NArchitecture.Core.Localization.Resource.Yaml.DependencyInjection" Version="1.0.0" />
 	<PackageReference Include="NArchitecture.Core.ElasticSearch" Version="1.0.0" />
+	<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="Services\Repositories" />
   </ItemGroup>
   <ItemGroup>

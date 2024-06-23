@@ -19,6 +19,7 @@ using NArchitecture.Core.Localization.Resource.Yaml.DependencyInjection;
 using NArchitecture.Core.Mailing;
 using NArchitecture.Core.Mailing.MailKit;
 using Application.Services.Reports;
+using Application.Services.RabbitMQClientService;
 
 namespace Application;
 
@@ -54,6 +55,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAuthService, AuthManager>();
         services.AddScoped<IAuthenticatorService, AuthenticatorManager>();
         services.AddScoped<IUserService, UserManager>();
+        services.AddScoped<IRabbitMQClientService, RabbitMQClientManager>();
 
         services.AddYamlResourceLocalization();
 
