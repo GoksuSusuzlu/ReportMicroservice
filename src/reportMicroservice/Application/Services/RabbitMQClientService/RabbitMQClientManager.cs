@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Services.RabbitMQClientService;
+
+using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -16,9 +18,15 @@ public class RabbitMQClientManager:IRabbitMQClientService
     private readonly IConnection _connection;
     private readonly IModel _channel;
 
-    public RabbitMQClientManager()
+    public RabbitMQClientManager(IConfiguration configuration)
     {
-        var factory = new ConnectionFactory() { HostName = "rabbitmq" };
+        var factory = new ConnectionFactory()
+        {
+            HostName = configuration["RabbitMQ:HostName"],
+            Port = int.Parse(configuration["RabbitMQ:Port"]),
+            UserName = configuration["RabbitMQ:UserName"],
+            Password = configuration["RabbitMQ:Password"]
+        };
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
     }

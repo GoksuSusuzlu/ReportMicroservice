@@ -4,20 +4,26 @@ services:
   webapi:
     build: .
     ports:
-      - "81:80"
+      - "81:81"
     depends_on:
       - db
-      - rabbitmq
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=ReportMicroservice;User Id=sa;Password=YourStrong!Passw0rd;
-
+      - RabbitMQ__HostName=rmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+    networks:
+      - mynetwork
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"
     ports:
-      - "1434:1433"
+      - "1434:1434"
+    networks:
+      - mynetwork
 
   migrate:
     build: .
@@ -26,15 +32,14 @@ services:
       - db
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=ReportMicroservice;User Id=sa;Password=YourStrong!Passw0rd;
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+      - RabbitMQ__HostName=rmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
     networks:
       - mynetwork
 
 networks:
   mynetwork:
+    name: mynetwork
     external: true
